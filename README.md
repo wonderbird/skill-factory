@@ -26,18 +26,7 @@ This keeps context lean while making rich knowledge available on demand.
 
 ## Using Your Skill
 
-This repo includes a `./skills` helper script for global installation.
-
-**Global** (all projects) — use the script to symlink to `~/.claude/skills/`:
-
-```bash
-./skills toggle    # interactive picker
-./skills status    # check what's installed
-```
-
-Edits to `output_skills/` apply immediately since it's a symlink.
-
-**Local** (single project) — copy the skill folder to your project's `.claude/skills/` or create a symlink in your project yourself.
+This fork installs skills per project with skill-manager (`sm`). See [docs/install-with-skill-manager.md](docs/install-with-skill-manager.md).
 
 ## STARTER_CHARACTER
 
