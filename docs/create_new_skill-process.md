@@ -142,19 +142,7 @@ Suggest improvements before proceeding.
 Ask the user if they'd like to create evals for this skill. Explain that evals are realistic test prompts paired with assertions about expected output — they measure whether the skill actually improves Claude's behavior compared to baseline, track quality across iterations, and catch regressions. If yes, follow `docs/create_evals-process.md`.
 
 ### 11. Install Skill (optional)
-Ask user: **Global skill or project skill?**
-
-**Global (symlink, personal, all projects):**
-```bash
-./skills install [skill-name]
-```
-
-**Project (copy, shared via git):**
-```bash
-./skills local install [skill-name]
-```
-
-Check status with `./skills status` or `./skills local status`.
+Install per project only, never globally. Ask the user to commit and push the skill to `fork`, then follow `docs/install-with-skill-manager.md` ("First-time setup" or "After you change a skill", then "Use a skill in a project").
 
 Tell user to restart Claude Code to load the skill.
 
