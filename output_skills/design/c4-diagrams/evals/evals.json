@@ -78,15 +78,13 @@
     {
       "id": 5,
       "prompt": "Read the code at /Users/ladak/workspace/knowledge/skill-factory and generate a C4 Container diagram of this project. Use ASCII format. Don't ask me questions — figure out the architecture from the code. Show internal containers, external systems, and the people who use it. Save the diagram to a file.",
-      "expected_output": "An ASCII C4 Container diagram derived from reading the actual skill-factory repo, showing its CLI (skills script), update wrapper, fetch scripts, the docs/output skill directories, and external dependencies (GitHub, claude.com docs, Claude Code, the user's ~/.claude/skills/ directory).",
+      "expected_output": "An ASCII C4 Container diagram derived from reading the actual skill-factory repo, showing its update wrapper, fetch scripts, the docs/output skill directories, and external dependencies (GitHub, claude.com docs, Claude Code).",
       "expectations": [
         "The output is a text-based ASCII diagram, not Mermaid or Structurizr syntax",
         "The diagram has a title naming this as a Container diagram for the skill-factory (or similar)",
         "The skill author (a person) is shown",
         "Claude Code is shown outside the system boundary as an external system (the framing — consumer of installed skills, authoring environment, etc. — is the author's choice)",
         "GitHub and/or claude.com (or platform.claude.com) appear as external systems for fetching documentation and the skill-creator",
-        "The ~/.claude/skills/ filesystem location appears as an external dependency or destination",
-        "The skills CLI (./skills) is shown as a container with its responsibility (managing skill installation/symlinking)",
         "The update-docs wrapper or fetch scripts are shown as a container with their responsibility (fetching upstream docs)",
         "The output_skills directory is shown as a container or data store (where authored skills live)",
         "The docs/knowledge directory is shown as a container or data store (where fetched dependencies live)",
