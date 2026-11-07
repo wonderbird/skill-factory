@@ -9,7 +9,7 @@ STARTER_CHARACTER = 📊
 
 Update the reference docs to get the latest from Anthropic:
 ```bash
-python ~/.claude/skills/writing-statuslines/scripts/update-docs.py
+python "${CLAUDE_SKILL_DIR}/scripts/update-docs.py"
 ```
 
 ## What Status Lines Are

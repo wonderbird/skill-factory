@@ -10,7 +10,7 @@ Patterns for effective AI-augmented software development by Lada Kesseler (githu
 ## First Step: Ensure Repository Exists and Update
 
 ```bash
-~/.claude/skills/ai-patterns/scripts/ensure-patterns-repo
+"${CLAUDE_SKILL_DIR}/scripts/ensure-patterns-repo"
 ```
 
 ## Patterns Location
