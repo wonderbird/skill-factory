@@ -81,3 +81,6 @@ Thumbs.db
 playground/
 workspace/
 *-workspace/
+# skill-manager project deployments (symlinks into ~/.skill-manager)
+.claude/skills
+.agents/skills
