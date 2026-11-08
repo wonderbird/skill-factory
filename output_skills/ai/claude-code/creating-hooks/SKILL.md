@@ -9,7 +9,7 @@ STARTER_CHARACTER = 🪝
 
 First, update the reference docs to get the latest from Anthropic:
 ```bash
-python ~/.claude/skills/creating-hooks/scripts/update-docs.py
+python "${CLAUDE_SKILL_DIR}/scripts/update-docs.py"
 ```
 
 ## What Hooks Are

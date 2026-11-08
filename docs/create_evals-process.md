@@ -277,4 +277,4 @@ skill-name/
   ...
 ```
 
-Workspace directories are created as siblings to the skill directory, named `{skill-name}-workspace/` (e.g., `output_skills/testing/tdd-workspace/`). They are gitignored (`*-workspace/`) and not picked up by the skills install script (no SKILL.md inside).
+Workspace directories are created as siblings to the skill directory, named `{skill-name}-workspace/` (e.g., `output_skills/testing/tdd-workspace/`). They are gitignored (`*-workspace/`) and not imported by skill-manager (no SKILL.md inside).

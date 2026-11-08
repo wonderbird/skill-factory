@@ -1,0 +1,140 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1794069364020,
+  "projectRoot": "/home/galadriel/Documents/Cline/skill-factory",
+  "techStack": {
+    "languages": [],
+    "frameworks": [],
+    "packageManager": null,
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": null,
+    "testCommand": null,
+    "lintCommand": null,
+    "devCommand": null,
+    "scripts": {}
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "docs",
+      "scripts"
+    ],
+    "gitBranches": {
+      "defaultBranch": "main",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "docs": {
+      "path": "docs",
+      "purpose": "Documentation",
+      "fileCount": 4,
+      "lastAccessed": 1794069364008,
+      "keyFiles": [
+        "create_evals-process.md",
+        "create_new_skill-process.md",
+        "map.md",
+        "project.md"
+      ]
+    },
+    "output_skills": {
+      "path": "output_skills",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1794069364009,
+      "keyFiles": []
+    },
+    "scripts": {
+      "path": "scripts",
+      "purpose": "Build/utility scripts",
+      "fileCount": 9,
+      "lastAccessed": 1794069364010,
+      "keyFiles": [
+        "export-refactoring-attempt",
+        "fetch_anthropic_skill_docs.py",
+        "fetch_skill_creator.py",
+        "fetch_writing_for_agents.py",
+        "next_iteration.py"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "evals-learning-plan.md",
+      "accessCount": 1,
+      "lastAccessed": 1793626673526,
+      "type": "file"
+    },
+    {
+      "path": "docs/map.md",
+      "accessCount": 1,
+      "lastAccessed": 1793626674712,
+      "type": "file"
+    },
+    {
+      "path": "output_skills/developer-tools/writing-bash-scripts/SKILL.md",
+      "accessCount": 5.998794789600006,
+      "lastAccessed": 1794069828396,
+      "type": "file"
+    },
+    {
+      "path": "output_skills/developer-tools/writing-bash-scripts-workspace/iteration-1/eval-1-cleanup-logs/without_skill/run-1/outputs/cleanup-logs",
+      "accessCount": 1,
+      "lastAccessed": 1794069814445,
+      "type": "file"
+    },
+    {
+      "path": "output_skills/developer-tools/writing-bash-scripts-workspace/iteration-1/eval-2-backup-notes/without_skill/run-1/outputs/backup-notes",
+      "accessCount": 1,
+      "lastAccessed": 1794069824840,
+      "type": "file"
+    },
+    {
+      "path": "output_skills/developer-tools/writing-bash-scripts-workspace/iteration-1/eval-3-git-prune-merged/without_skill/run-1/outputs/git-prune-merged",
+      "accessCount": 2.99978530478019,
+      "lastAccessed": 1794069863016,
+      "type": "file"
+    },
+    {
+      "path": "output_skills/developer-tools/writing-bash-scripts-workspace/iteration-1/eval-3-git-prune-merged/with_skill/run-1/transcript.md",
+      "accessCount": 1,
+      "lastAccessed": 1794069860320,
+      "type": "file"
+    },
+    {
+      "path": "output_skills/developer-tools/writing-bash-scripts-workspace/iteration-1/eval-3-git-prune-merged/with_skill/run-1/outputs/user_notes.md",
+      "accessCount": 1,
+      "lastAccessed": 1794069864092,
+      "type": "file"
+    },
+    {
+      "path": "output_skills/developer-tools/writing-bash-scripts-workspace/iteration-1/eval-3-git-prune-merged/without_skill/run-1/transcript.md",
+      "accessCount": 1,
+      "lastAccessed": 1794069879205,
+      "type": "file"
+    },
+    {
+      "path": "output_skills/developer-tools/writing-bash-scripts-workspace/iteration-1/eval-3-git-prune-merged/without_skill/run-1/outputs/user_notes.md",
+      "accessCount": 1,
+      "lastAccessed": 1794069883394,
+      "type": "file"
+    },
+    {
+      "path": "docs/install-with-skill-manager.md",
+      "accessCount": 1,
+      "lastAccessed": 1794079208480,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}
