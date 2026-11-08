@@ -11,7 +11,7 @@ This fork installs skills per project with [skill-manager](https://github.com/om
 Import every skill from this repository into the sm store. This deploys nothing:
 
 ```bash
-sm source add https://github.com/wonderbird/skill-factory --install
+sm source add --install https://github.com/wonderbird/skill-factory
 ```
 
 The import also stores the vendored skills under `docs/knowledge/` (e.g. `anthropic-skill-creator`). They are harmless and stay undeployed unless you deploy them with `sm add <name> --cc --project`.
@@ -32,7 +32,7 @@ sm doctor                            # check the deployment
 2. In an interactive terminal, run again:
 
    ```bash
-   sm source add https://github.com/wonderbird/skill-factory --install
+   sm source add --install https://github.com/wonderbird/skill-factory
    ```
 
    It asks before updating each changed skill. Without a terminal it skips the updates silently. `sm source sync` alone only pulls, and does not update the store.
@@ -40,8 +40,9 @@ sm doctor                            # check the deployment
 3. If you changed bundled files (e.g. `scripts/`), re-importing updates only `SKILL.md`. Purge and re-import the skill:
 
    ```bash
-   sm remove <skill-name> --purge   # deletes it from the store and undeploys it from every project
-   sm source add https://github.com/wonderbird/skill-factory --install
+   sm backup
+   sm remove <skill-name> --purge  --force  # deletes it from the store and undeploys it from every project
+   sm source add --install https://github.com/wonderbird/skill-factory
    cd /path/to/your/project && sm add <skill-name> --cc --project
    ```
 

@@ -35,7 +35,7 @@ skill-factory/
 │   │       └── assets/                 # HTML templates for trigger eval review
 │   ├── create_new_skill-process.md     # Instructions for creating skills
 │   ├── create_evals-process.md        # Instructions for evaluating skills
-│   ├── install-with-skill-manager.md  # Fork-only: install skills per project with sm
+│   ├── install-with-skill-manager.md   # Install skills per project with sm
 │   ├── map.md                          # This file - repository structure
 │   └── project.md                      # Project-specific information
 └── output_skills/                      # Created skills organized by category
