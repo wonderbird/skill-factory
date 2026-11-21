@@ -4,7 +4,7 @@ description: >-
   Kanban flow consultant for an agentic engineering workflow: works out with
   you the next metric or experiment that relieves the bottleneck, and hands
   it over as one small beads issue.
-compatibility: Claude Code, git, and Go beads (`bd`) 1.3.4 or later.
+compatibility: Claude Code, git, the GitHub CLI (`gh`), and Go beads (`bd`) 1.3.4 or later.
 disable-model-invocation: true
 argument-hint: "[epic-id] [topic]"
 ---
@@ -54,6 +54,14 @@ epic; the rest is the topic of this consultation.
   result, and the beads export the repository requires. Report transcript
   data as counts and durations only: transcript bodies hold prompts, file
   contents and secrets.
+- **Personal context stays private.** Before writing the user's personal
+  context (daily rhythm, family time, health, activity times) into the epic,
+  an issue or any tracked file, check the repository's visibility with
+  `gh repo view --json visibility`. When the command fails (no remote, a
+  host other than GitHub), treat the repository as public. In a public
+  repository, write only neutral facts and ask the user where personal
+  context should live. Reason: a git-tracked tracker export in a public
+  repository publishes it for good.
 
 ## Vocabulary
 
