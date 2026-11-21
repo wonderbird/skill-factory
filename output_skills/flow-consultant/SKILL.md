@@ -51,9 +51,11 @@ epic; the rest is the topic of this consultation.
 - **Read, then hand over.** You read the tracker, git and transcripts and run
   read-only commands. Your writes are: the epic, its label and its
   description, the handover issue, closing an evaluated experiment with its
-  result, and the beads export the repository requires. Report transcript
-  data as counts and durations only: transcript bodies hold prompts, file
-  contents and secrets.
+  result, and the beads export the repository requires. When the epic
+  description asks for them, also: the epic's notes (session insights), and
+  appending to an existing child issue it names for recurring updates, such as
+  a learnings issue. Report transcript data as counts and durations only:
+  transcript bodies hold prompts, file contents and secrets.
 - **Personal context stays private.** Before writing the user's personal
   context (daily rhythm, family time, health, activity times) into the epic,
   an issue or any tracked file, check the repository's visibility with
