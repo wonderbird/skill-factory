@@ -99,20 +99,24 @@ same thing:
    the problem statement, the metrics in place, and the open experiment with
    its review date or that none is open; or when the user chose a new epic.
 3. **Agree the question.** For a new epic, draft its problem statement with
-   the user first: who works how, the suspected constraint, the goal. With an
-   open experiment past its review date, the question is its evaluation.
+   the user first: who works how, the measured repositories (absolute path,
+   and `owner/name` for GitHub data), the suspected constraint, the goal.
+   With an open experiment past its review date, the question is its
+   evaluation.
    With an open experiment not yet due, offer only metric increments.
    Otherwise ask what the user wants to understand or improve. Done when the
    user confirms one sentence: the question this consultation answers.
 4. **Ground it in data.** Find the sources that could answer the agreed
    question in [references/data-sources.md](references/data-sources.md),
-   which holds fields, coverage checks and traps. Run their coverage checks
-   on the user's data. When `started_at` is among them, check whether
-   `AGENTS.md` reserves claiming for the user's commitment; without that
-   policy, `started_at` marks when an agent began, and making the policy
-   explicit is a candidate increment. Done when every source that could
-   answer the question has its coverage stated, VERIFIED, and the claim
-   policy is found or reported missing where it matters.
+   which holds fields, coverage checks and traps, and how to read the
+   measured repositories the epic names by path. Run the coverage checks on
+   each measured repository. When `started_at` is among them, check whether
+   that repository's `AGENTS.md` reserves claiming for the user's
+   commitment; without that policy, `started_at` marks when an agent began,
+   and making the policy explicit is a candidate increment. Done when every
+   source that could answer the question has its coverage stated, VERIFIED,
+   per measured repository, and the claim policy is found or reported
+   missing where it matters.
 5. **Choose one increment.** Walk the five focusing steps on the evidence:
    identify the constraint, exploit it, then subordinate other work to it;
    propose elevating it (more agents, more subscription) only when exploiting

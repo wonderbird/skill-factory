@@ -4,21 +4,32 @@ Field paths below were checked against Go beads (`bd`) 1.3.4 and Claude Code
 2.1.x transcripts in November 2026; formats change between versions. All
 commands are read-only.
 
+## Measured repositories
+
+The tracker with the flow-improvement epic may live in one repository and the
+work it measures in others. The epic description names the measured
+repositories: read each one's absolute path, and its `owner/name` when you
+need GitHub data. Read every source by path and stay in the working
+directory: `git -C <path>`, `gh --repo <owner/name>`, and `jq` on
+`<path>/.beads/issues.jsonl`. `<path>` below is a measured repository's
+absolute path, without a trailing slash.
+
 ## Beads
 
 Read beads data through the `bd` CLI or its JSONL export, never through the
 store directly: the store can be embedded Dolt or a Dolt server.
 
-- `.beads/issues.jsonl` holds every record only when exported with
-  `bd export --all`; a plain export drops gates and memories. Check the
-  repository's `AGENTS.md` for its export rule; it is current only if every
-  agent follows it.
+- `<path>/.beads/issues.jsonl` holds every record only when exported with
+  `bd export --all`; a plain export drops gates and memories. Check
+  `<path>/AGENTS.md` for its export rule; the export is current only if
+  every agent follows it.
 - `started_at` is set by `bd update <id> --claim`. Coverage varies, because
   not every item gets claimed.
 - `bd history <id> --events` shows status changes (claims, closes) but is
   not durable: a re-import resets it. It is no source for history.
-- Count and aggregate from the JSONL export. `bd list` stops at 50 results
-  by default and hides gates unless given `--include-gates`. Wrap any
+- Count and aggregate from the JSONL export. `bd` reads the tracker of the
+  working directory, not of a measured repository. `bd list` stops at 50
+  results by default and hides gates unless given `--include-gates`. Wrap any
   `--limit 0` listing in `timeout`: unbounded listings can hang on large
   databases.
 
@@ -28,7 +39,8 @@ Field coverage, as percent of records:
 jq -s 'length as $n | [.[]|keys[]] | group_by(.)
   | map({k:.[0], pct:(length*100/$n|floor)})
   | map(select(.k|IN("status","issue_type","created_at","started_at",
-      "closed_at","close_reason","labels","dependencies")))' .beads/issues.jsonl
+      "closed_at","close_reason","labels","dependencies")))' \
+  <path>/.beads/issues.jsonl
 ```
 
 ### Status transitions from git snapshots
@@ -38,16 +50,17 @@ is the commit cadence: items created and closed between two commits appear
 only as `closed`.
 
 ```python
-"""Print id, status, first commit time it was seen. Run from repo root."""
+"""Print id, status, first commit time it was seen. Args: <repo-path> [file]."""
 import json, subprocess, sys
-path = sys.argv[1] if len(sys.argv) > 1 else ".beads/issues.jsonl"
+repo = sys.argv[1]
+path = sys.argv[2] if len(sys.argv) > 2 else ".beads/issues.jsonl"
 log = subprocess.run(
-    ["git", "log", "--reverse", "--format=%H %cI", "--", path],
+    ["git", "-C", repo, "log", "--reverse", "--format=%H %cI", "--", path],
     capture_output=True, text=True, check=True).stdout.split("\n")
 last = {}
 for line in filter(None, log):
     sha, when = line.split(" ", 1)
-    blob = subprocess.run(["git", "show", f"{sha}:{path}"],
+    blob = subprocess.run(["git", "-C", repo, "show", f"{sha}:{path}"],
                           capture_output=True, text=True)
     if blob.returncode:
         continue
@@ -67,15 +80,16 @@ Reopens are `closed` followed by any other status for the same id.
 ## Git
 
 - Agent-guidance changes, to mark on every time axis:
-  `git log --format='%cs %h %s' -- CLAUDE.md AGENTS.md .claude`, plus every
-  other rule file the repository has, such as a constitution.
+  `git -C <path> log --format='%cs %h %s' -- CLAUDE.md AGENTS.md .claude`,
+  plus every other rule file the repository has, such as a constitution.
 - Commit-to-item join: issue ids in trailers such as `Refs: <id>`.
 - Commit types: the conventional-commit prefix, e.g. `fix:`, in the subject.
 - Branch-to-item join: the repository's branch naming rule, if any.
 
 ## Claude Code transcripts
 
-Directory: `~/.claude/projects/$(pwd | sed 's|[^A-Za-z0-9]|-|g')/`. Each
+Directory: `~/.claude/projects/$(echo <path> | sed 's|[^A-Za-z0-9]|-|g')/`,
+derived from the measured repository, not from the working directory. Each
 session is `<uuid>.jsonl`; subagents are in `<uuid>/subagents/*.jsonl`.
 Worktrees get their own directory; match them on the `cwd` field.
 Retention follows `cleanupPeriodDays` in `~/.claude/settings.json`, so
