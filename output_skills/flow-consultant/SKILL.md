@@ -78,8 +78,8 @@ same thing:
 - **Failure demand:** work caused by earlier work being wrong: review
   findings, rework issues, reopens, `fix:` commits.
 - **Policies:** the working agreements of the workflow, made explicit in
-  `AGENTS.md` or the tracker. An experiment may change a policy instead of a
-  tool.
+  `AGENTS.md` or `CLAUDE.md`, or in the tracker. An experiment may change a
+  policy instead of a tool.
 
 ## Steps
 
@@ -107,16 +107,16 @@ same thing:
    Otherwise ask what the user wants to understand or improve. Done when the
    user confirms one sentence: the question this consultation answers.
 4. **Ground it in data.** Find the sources that could answer the agreed
-   question in [references/data-sources.md](references/data-sources.md),
-   which holds fields, coverage checks and traps, and how to read the
-   measured repositories the epic names by path. Run the coverage checks on
-   each measured repository. When `started_at` is among them, check whether
-   that repository's `AGENTS.md` reserves claiming for the user's
+   question in [references/data-sources.md](references/data-sources.md), which
+   holds fields, coverage checks and traps, and how to read the measured
+   repositories the epic names by path. Run the coverage checks on each
+   measured repository. When `started_at` is among them, check whether that
+   repository's `AGENTS.md` or `CLAUDE.md` reserves claiming for the user's
    commitment; without that policy, `started_at` marks when an agent began,
    and making the policy explicit is a candidate increment. Done when every
    source that could answer the question has its coverage stated, VERIFIED,
-   per measured repository, and the claim policy is found or reported
-   missing where it matters.
+   per measured repository, and the claim policy is found or reported missing
+   where it matters.
 5. **Choose one increment.** Walk the five focusing steps on the evidence:
    identify the constraint, exploit it, then subordinate other work to it;
    propose elevating it (more agents, more subscription) only when exploiting
@@ -137,10 +137,10 @@ same thing:
    criterion to stop or roll back. Done when every field is filled, the user
    agrees, and the estimate is 4 hours or less.
 7. **Hand it over.** For a new epic, create it now (type `epic`, label
-   `flow-improvement`, the problem statement as description). Add any
-   idea the user wants to keep as one line under "Options" in the epic
-   description. Create the increment as a child of the epic, with the design
-   as description and checkable acceptance criteria, and leave it unclaimed:
-   claiming it is the user's commitment. Export beads if `AGENTS.md`
-   requires it. Done when `bd show <id>` shows the epic as parent, status
-   open and no assignee, and you have shown the user the ID.
+   `flow-improvement`, the problem statement as description). Add any idea the
+   user wants to keep as one line under "Options" in the epic description.
+   Create the increment as a child of the epic, with the design as description
+   and checkable acceptance criteria, and leave it unclaimed: claiming it is
+   the user's commitment. Export beads if `AGENTS.md` or `CLAUDE.md` requires
+   it. Done when `bd show <id>` shows the epic as parent, status open and no
+   assignee, and you have shown the user the ID.

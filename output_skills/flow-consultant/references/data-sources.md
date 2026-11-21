@@ -21,8 +21,8 @@ store directly: the store can be embedded Dolt or a Dolt server.
 
 - `<path>/.beads/issues.jsonl` holds every record only when exported with
   `bd export --all`; a plain export drops gates and memories. Check
-  `<path>/AGENTS.md` for its export rule; the export is current only if
-  every agent follows it.
+  `<path>/AGENTS.md` or `<path>/CLAUDE.md` for its export rule; the export
+  is current only if every agent follows it.
 - `started_at` is set by `bd update <id> --claim`. Coverage varies, because
   not every item gets claimed.
 - `bd history <id> --events` shows status changes (claims, closes) but is
