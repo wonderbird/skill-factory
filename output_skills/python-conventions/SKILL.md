@@ -102,11 +102,14 @@ These rules bind test modules too.
 
 ## Test rules
 
-- **Sibling test module.** A module ships with tests unless it is too trivial
-  to test. The tests are `unittest.TestCase` classes in a sibling
-  `test_<module>.py`, run under pytest. A project that already keeps its tests
-  in a test directory keeps them there. When several test modules share test
-  support, such as fake executables, it lives in a separate module.
+- **Test module per module.** A module ships with tests unless it is too
+  trivial to test: `unittest.TestCase` classes in `test_<module>.py`, run
+  under pytest. Code that is packaged or installed keeps them in a top-level
+  `tests/` directory that mirrors the package path and imports the package by
+  its absolute name. Scripts run in place from a checkout keep
+  `test_<script>.py` beside the script. A project with an existing test layout
+  keeps it. Test support that several test modules share, such as fake
+  executables, lives in its own module in the same place.
 - **Test our own logic.** Mock the standard library and external tools only at
   their boundary. Internal helpers run for real. A test never checks the
   behaviour of the standard library or of the tool.
@@ -131,7 +134,8 @@ These rules bind test modules too.
 - **Fixture builders take explicit inputs.** A builder takes its inputs as
   arguments and returns what it builds, so `setUp` shows the data flow.
 - **Acceptance tests run by name.** A test that needs the real tools, the
-  network or minutes of run time lives in `acceptance_<module>.py`. That name
+  network or minutes of run time lives in `acceptance_<module>.py`, in the
+  same place as the unit tests. That name
   does not match pytest's default pattern `test_*.py`, so the default run
   skips it. Run it by naming the file.
 - **Guards proven by failure.** A test, check or assertion counts as proven

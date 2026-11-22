@@ -91,9 +91,9 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-from . import release
-from .errors import ReleaseError
-from .fakes import first_on_path, logged_calls, write_fake
+import release
+from errors import ReleaseError
+from fakes import first_on_path, logged_calls, write_fake
 
 
 class PublishTest(unittest.TestCase):
@@ -149,5 +149,6 @@ def make_git_repo(path, version):
 `enterContext` needs Python 3.11 or later. On older versions, call
 `self.addCleanup(tmp.cleanup)` for the `TemporaryDirectory`, and
 `patcher.start()` with `self.addCleanup(patcher.stop)` for the environment
-patch. The test module sits in a package; for a single script without a
-package, import the module with `import release`.
+patch. The example shows scripts run in place, so the test module sits beside
+`release.py` and imports it by name. For packaged code, the test module and
+`fakes.py` sit in `tests/`, and the test imports `from <pkg> import release`.
