@@ -13,7 +13,9 @@ breaks when the call changes even though the behaviour stays the same.
   the shebang `#!{sys.executable}` when the fake must parse input, such as a
   manifest.
 - The fake logs its arguments, one line per call. It then succeeds or fails
-  as the test requires. An environment variable such as `FAKE_GH_MODE` can
+  as the test requires. A `sh` log joins the arguments with spaces; when
+  argument boundaries matter, write a Python fake that logs
+  `json.dumps(sys.argv[1:])`. An environment variable such as `FAKE_GH_MODE` can
   select the behaviour, so one fake serves several tests.
 - The fake reaches the code in one of two ways:
   - A tool that the code looks up on `PATH` comes from the temporary
@@ -23,8 +25,12 @@ breaks when the call changes even though the behaviour stays the same.
 - Each test states what its fake does. The plumbing that every fake shares
   lives in a shared test module, e.g. `fakes.py`.
 - Fast, local tools such as git stay real. They run in a temporary
-  repository, with `HOME` and the `XDG_*` directories redirected, so that no
-  test touches the developer's checkout or configuration.
+  repository, with `HOME` and the `XDG_*` directories redirected and without
+  the inherited `GIT_*` variables, so that no test touches the developer's
+  checkout or configuration. A git hook sets `GIT_DIR` and similar variables,
+  which point git at the real repository.
+- Fakes written as `sh` scripts need a POSIX shell. On Windows, write a
+  `.cmd` file or a Python wrapper instead.
 
 ## Worked example
 
@@ -49,7 +55,7 @@ def write_fake(path, behaviour="", log=None):
     # then runs the behaviour.
     script = "#!/bin/sh\n"
     if log is not None:
-        script += f'echo "$@" >> "{log}"\n'
+        script += f'printf "%s\\n" "$*" >> "{log}"\n'
     script += textwrap.dedent(behaviour)
 
     return write_executable(path, script)
@@ -72,8 +78,10 @@ def first_on_path(bin_dir):
 ```
 
 A test module for a simplified `release.publish()` that reads `VERSION` in a
-git repository and runs `gh release create`. The class lists `setUp`, then the
-tests, then the helpers. The module-level fixture builder follows the class:
+git repository and runs `gh release create`. The real step would skip a
+release that already exists, to stay re-runnable. `setUp` replaces the process
+environment once, so git and the fake both run with a temporary `HOME` and
+without inherited `GIT_*` variables, and every test inherits the isolation:
 
 ```python
 import os
@@ -97,12 +105,14 @@ class PublishTest(unittest.TestCase):
         bin_dir.mkdir()
         self.log = tmp / "gh-calls"
         self.fake_gh = write_fake(bin_dir / "gh", log=self.log)
-        env = {
-            **first_on_path(bin_dir),
+        env = {k: v for k, v in os.environ.items() if not k.startswith("GIT_")}
+        env |= first_on_path(bin_dir)
+        env |= {
             "HOME": str(tmp / "home"),
             "XDG_CONFIG_HOME": str(tmp / "config"),
+            "GIT_CONFIG_NOSYSTEM": "1",
         }
-        self.enterContext(mock.patch.dict(os.environ, env))
+        self.enterContext(mock.patch.dict(os.environ, env, clear=True))
 
         # A real git repository, because git is fast and local.
         self.repo = make_git_repo(tmp / "repo", version="1.2.0")
@@ -136,13 +146,8 @@ def make_git_repo(path, version):
     return path
 ```
 
-What the example shows:
-
-- `setUp` shows the data flow. `make_git_repo` takes its inputs as
-  arguments and returns the repository.
-- `setUp` patches the process environment once, so git and the fake both
-  run with a temporary `HOME`, and every test inherits the isolation.
-- The tests assert outcomes: what `gh` received, the error raised, and that
-  `gh` never ran after a failed precondition.
-- `run_release_publish_with` is the only place that calls the function under
-  test, so every test body reads as a specification.
+`enterContext` needs Python 3.11 or later. On older versions, call
+`self.addCleanup(tmp.cleanup)` for the `TemporaryDirectory`, and
+`patcher.start()` with `self.addCleanup(patcher.stop)` for the environment
+patch. The test module sits in a package; for a single script without a
+package, import the module with `import release`.

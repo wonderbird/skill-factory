@@ -23,13 +23,15 @@ rules below, each named in bold.
 These rules bind test modules too.
 
 - **One public entry point.** A module exposes only the functions its callers
-  use. Every internal helper has a `_` prefix.
+  use. Every internal helper has a `_` prefix. Test modules are exempt: their
+  tests, `setUp`, helpers and fixture builders keep plain names.
 - **Name by meaning.** A name states what it holds, e.g. `for user in users`.
   This applies in comprehensions and lambdas too. Single letters are allowed
   only for the idioms `e` (caught exception), `k, v` (dict items), `_`
   (ignored value) and `i` (index).
 - **One block per intent.** In a function whose body has more than five lines
-  of code (not counting the docstring, comments and blank lines), put an empty
+  of code (not counting the docstring, comments and blank lines; a statement
+  that spans several lines counts as one), put an empty
   line between the blocks that each serve one intent. Start each block with a
   short comment that names its intent, the way a heading names a section,
   e.g. `# Check every precondition before the first write.` A body that serves
@@ -40,44 +42,54 @@ These rules bind test modules too.
   delete it. A comment that restates the code costs every reader time. It also
   drifts from the code, and nothing fails when the two disagree.
 - **Explicit over implicit.** A condition tests a `bool`. Compare any other
-  value explicitly: `name != ""`, `len(items) > 0`, `value is not None`. A
-  call that returns a `bool`, such as `path.exists()`, complies. Conditions
+  value explicitly: `name != ""`, `len(items) > 0`, `value is not None`. The
+  rewrite keeps the meaning: a value that may be `None` or empty needs both
+  tests, `name is not None and name != ""`. A call that returns a `bool`,
+  such as `path.exists()`, complies. Conditions
   include `if`, `while`, conditional expressions, `and`/`or` operands and
   `assertTrue`. This rule overrides PEP 8's advice to rely on the truthiness
-  of empty sequences. Every
-  `subprocess.run` passes `check=`: `check=True`, or `check=False` when the
-  code then reads `returncode`.
+  of empty sequences. Every `subprocess.run` passes `check=`: `check=True`,
+  or `check=False` when the code then reads `returncode`. `Popen` and
+  `asyncio` subprocesses have no `check=`: test `returncode != 0` and raise.
 - **Fail loud.** When the code cannot fetch, parse or compute a value that it
-  needs, it stops. Its error message names the source (variable, path, URL or
-  command) and the fix. It validates the output of a tool before it uses that
-  output. Anti-examples: `.get(key, "")` for a required key, a `None` result
-  that the caller passes on, `except Exception: pass`, an early `return` when
-  a required file is missing. A silent failure gives a system that looks
-  healthy but is misconfigured. An error at the gap is faster to diagnose than
-  the symptom that appears later.
+  needs, it raises. That stops the current operation: a command-line program
+  exits, a service fails the request or job, not the process. A bounded retry
+  of a transient error complies when the final failure raises. The error
+  message names the source (variable, path, URL or command) and the fix. The
+  code validates the output of a tool before it uses that output.
+  Anti-examples: `.get(key, "")` for a required key, a `None` result that the
+  caller passes on, `except Exception: pass`, an early `return` when a
+  required file is missing. An early `return` because the work is already
+  done is idempotency, not a silent failure. A silent failure gives a system
+  that looks healthy but is misconfigured. An error at the gap is faster to
+  diagnose than the symptom that appears later.
 - **One error type.** A command-line program raises one exception type of its
   own for expected failures. Only `main()` catches it. `main()` prints the
   message to stderr and returns a nonzero exit code, and the module runs it
   as `sys.exit(main())` under `if __name__ == "__main__":`. `main()` also
-  catches `subprocess.CalledProcessError` from `check=True`, whose message
-  already names the command and its exit status. Because `main()`
-  returns the code instead of exiting, a test can call it. Library code raises
-  and leaves printing and exiting to its caller. An unexpected exception stays
+  catches `subprocess.CalledProcessError` from `check=True`. Its message names
+  only the command and the exit status, so `main()` also prints `e.stderr`
+  when the output was captured. Because `main()` returns the code instead of
+  exiting, a test can call it: `main(argv=None)` passes `argv` to
+  `parse_args(argv)`, and a test calls `main([...])`. Library code raises and
+  leaves printing and exiting to its caller. An unexpected exception stays
   uncaught, so it keeps its traceback.
-- **Preconditions first.** A script that changes state checks every
-  precondition that it can before its first change. Afterwards it verifies
-  the result itself when a tool can fail silently, e.g. when the tool reports
-  a failure only as a warning. A run that fails early leaves less half-done
-  work.
+- **Preconditions first.** A script (a program run to completion from the
+  command line) that changes state checks every precondition that it can
+  before its first change. A required tool is such a precondition: check it
+  with `shutil.which()` and raise the program's own error naming how to
+  install it. Afterwards the script verifies the result itself when a tool can
+  fail silently, e.g. when the tool reports a failure only as a warning. A run
+  that fails early leaves less half-done work.
 - **Re-runnable.** A script that changes state is idempotent. Run again after
   a success, it changes nothing and succeeds. Run again after a partial
   failure, it finishes the work. Logs and timestamps may change.
-- **Environment inputs as parameters.** A function takes filesystem roots, the
-  home directory and similar inputs from the environment as parameters. Their
-  defaults are the real values, e.g. `publish(repo_root=REPO_ROOT, home=HOME)`.
-  Tests pass temporary directories instead of patching module globals. The
-  process environment, which carries `PATH` and `HOME`, is the exception:
-  tests patch it with `mock.patch.dict(os.environ, ...)`.
+- **Environment inputs as parameters.** A function that reads a filesystem
+  root, the home directory or a similar location itself takes it as a
+  parameter, so tests pass temporary directories instead of patching module
+  globals. A default that depends on the environment is resolved inside the
+  call, not at import: `home=None`, then `Path.home()` when it is `None`.
+  Tests patch `os.environ` (`PATH`, `HOME`) only to isolate child processes.
 - **Simplicity.** Solve the current, confirmed need with the minimum working
   solution. Add a parameter, option or abstraction only for a caller that
   exists now, and justify any complexity you add. Tests are such callers (see
@@ -92,7 +104,8 @@ These rules bind test modules too.
 
 - **Sibling test module.** A module ships with tests unless it is too trivial
   to test. The tests are `unittest.TestCase` classes in a sibling
-  `test_<module>.py`, run under pytest. When several test modules share test
+  `test_<module>.py`, run under pytest. A project that already keeps its tests
+  in a test directory keeps them there. When several test modules share test
   support, such as fake executables, it lives in a separate module.
 - **Test our own logic.** Mock the standard library and external tools only at
   their boundary. Internal helpers run for real. A test never checks the
@@ -125,20 +138,22 @@ These rules bind test modules too.
   only after you have seen it fail on known-bad input. Break the guarded code
   (delete a check, drop a flag), run the tests, see at least one test fail,
   then restore the code and see the tests pass. If no test catches the break,
-  write a test that does. In a review, report a new or changed test as
-  unproven, not as passing, unless its failing run is recorded (commit, pull
-  request, CI log). A guard that cannot fail looks exactly like a guard that
-  finds nothing wrong.
+  write a test that does. In a review, prove a new or changed test in a
+  temporary copy of the code, so the working tree stays unchanged. Report a
+  test as unproven, not as passing, when you could not prove it and no failing
+  run is recorded (commit, pull request, CI log). A guard that cannot fail
+  looks exactly like a guard that finds nothing wrong.
 
 ## Ruff gate
 
-The gate is part of done in both branches. It enforces formatting, line
-length, import order, current idioms and common bug patterns. The rules
-above leave those topics to ruff.
+The gate is part of done in both branches. The rules above leave formatting,
+line length, import order, current idioms and common bug patterns to ruff.
 
 - When the project has no ruff configuration (`ruff.toml`, `.ruff.toml` or
   `[tool.ruff]` in `pyproject.toml`), add `--extend-select E501,W,I,UP,B` to
   `ruff check`.
+- When the project formats with another tool, such as black, run that tool
+  instead of `ruff format`, and skip `ruff format --check` in a review.
 - When `ruff` is not on `PATH`, run it as `uvx ruff`.
 
 ## Write
@@ -173,6 +188,6 @@ together with the modules, functions and test classes that contain them.
    the concrete change. A finding about a whole module, such as a missing
    test module or unformatted code, gives the path without a line, e.g.
    `app/cli.py | ruff format | Run ruff format`. If you find a defect that no
-   rule covers, list it
-   after the findings, under the heading `Outside the conventions`. If you
-   have no findings, report `No findings` and the ruff results.
+   rule covers, list it after the findings, under the heading
+   `Outside the conventions`. If you have no findings, report `No findings`
+   and the ruff results.
