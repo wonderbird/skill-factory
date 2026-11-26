@@ -1,4 +1,4 @@
-repos:
-  primary: "."
-  additional:
-    - "/home/galadriel/.beads-planning"
+issue-prefix: skill-factory
+no-git-ops: true
+sync:
+    remote: git+https://github.com/wonderbird/skill-factory.git
