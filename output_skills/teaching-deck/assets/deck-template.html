@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="LANG">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DECK TITLE</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/reset.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/theme/white.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/plugin/highlight/monokai.css">
+
+  <style>
+    :root {
+      --r-main-font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      --r-heading-font: var(--r-main-font);
+      --r-main-font-size: 32px;
+      --r-heading1-size: 2.2em;
+      --r-heading2-size: 1.4em;
+      --r-heading-text-transform: none;
+      --r-heading-font-weight: 650;
+      --r-main-color: #1d232b;
+      --r-heading-color: #1d232b;
+      --r-link-color: #0b5cad;
+      --accent: #0b5cad;
+      --muted: #5b6573;
+    }
+    .reveal .muted { color: var(--muted); }
+    .reveal .accent { color: var(--accent); }
+    .reveal .small { font-size: 0.7em; }
+    .reveal .columns { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5em; align-items: start; }
+    .reveal ul { display: block; }
+  </style>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <!-- Title slide -->
+      <section data-timing="30">
+        <h1>DECK TITLE</h1>
+        <p class="muted">SPEAKER · EVENT · DATE</p>
+        <aside class="notes">
+          Greeting. One sentence on why this talk matters to this audience.
+        </aside>
+      </section>
+
+      <!-- Content slide: assertion title, short body, notes with source -->
+      <section data-timing="60">
+        <h2>THE TITLE STATES THE MESSAGE AS A SENTENCE</h2>
+        <ul>
+          <li class="fragment">FIRST POINT</li>
+          <li class="fragment">SECOND POINT</li>
+        </ul>
+        <aside class="notes">
+          What to say. Transition to the next slide.
+          Source: SOURCE NOTE.
+        </aside>
+      </section>
+
+      <!-- Section title slide -->
+      <section data-background-color="#0b5cad" data-timing="15">
+        <h2 style="color:#fff">SECTION TITLE</h2>
+        <aside class="notes">The question this section answers.</aside>
+      </section>
+
+      <!-- Appendix as a vertical stack -->
+      <section>
+        <section>
+          <h2>APPENDIX</h2>
+          <aside class="notes">Backup material, shown only on request.</aside>
+        </section>
+        <section>
+          <h2>BACKUP SLIDE</h2>
+          <aside class="notes">Notes for the backup slide.</aside>
+        </section>
+      </section>
+
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/reveal.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/plugin/notes/notes.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/plugin/highlight/highlight.js"></script>
+  <script>
+    Reveal.initialize({
+      width: 1280,
+      height: 720,
+      margin: 0.04,
+      hash: true,
+      slideNumber: "c/t",
+      showNotes: false,
+      defaultTiming: 60,
+      transition: "fade",
+      plugins: [RevealNotes, RevealHighlight]
+    });
+  </script>
+</body>
+</html>
